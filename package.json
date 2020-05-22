@@ -1,10 +1,10 @@
 {
-  "name": "@croct/rule-engine-audiences",
+  "name": "@croct/rule-engine-url-variables",
   "version": "0.0.0-dev",
-  "description": "A rule engine extension for audience targeting.",
+  "description": "A rule engine extension for passing variables through the URL.",
   "author": {
     "name": "Croct",
-    "email": "rule-engine-audiences-js+lib@croct.com",
+    "email": "rule-engine-url-variables-js+lib@croct.com",
     "url": "https://croct.com"
   },
   "license": "MIT",
@@ -22,12 +22,12 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/croct-tech/rule-engine-audiences-js.git"
+    "url": "git+https://github.com/croct-tech/rule-engine-url-variables-js.git"
   },
   "bugs": {
-    "url": "https://github.com/croct-tech/rule-engine-audiences-js/issues"
+    "url": "https://github.com/croct-tech/rule-engine-url-variables-js/issues"
   },
-  "homepage": "https://github.com/croct-tech/rule-engine-audiences-js",
+  "homepage": "https://github.com/croct-tech/rule-engine-url-variables-js",
   "scripts": {
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
     "test": "jest -c jest.config.js --coverage",
