@@ -6,7 +6,7 @@ beforeEach(() => {
 });
 
 describe('A page store', () => {
-    test('should persist variables', () => {
+    test('should persist variables in memory', () => {
         const store = new PageStore();
 
         expect(store.getVariables().foo).toBeUndefined();
@@ -18,7 +18,7 @@ describe('A page store', () => {
 });
 
 describe('A local store', () => {
-    test('should persist variables in given storage in json format', () => {
+    test('stores variables in given storage serialized as JSON', () => {
         const store = new LocalStore(window.localStorage);
 
         expect(store.getVariables().foo).toBeUndefined();
@@ -34,7 +34,7 @@ describe('A local store', () => {
         expect(window.localStorage.bar).toBeUndefined();
     });
 
-    test('cannot provide a value if it is an invalid JSON', () => {
+    test('cannot access a value which is not JSON-serialized', () => {
         const store = new LocalStore(window.localStorage);
 
         window.localStorage.setItem('foo', '{');

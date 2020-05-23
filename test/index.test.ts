@@ -2,14 +2,22 @@ import engine from '@croct/plug-rule-engine/plugin';
 import {ExtensionFactory} from '@croct/plug-rule-engine/extension';
 import {PluginSdk} from '@croct/plug/plugin';
 import UrlVariablesExtension from '../src/extension';
-import {LocalStore, PageStore, VariableStore} from '../src/store';
-import {Options} from '../src';
+import {LocalStore, PageStore} from '../src/store';
+import '../src';
 
 afterAll(() => {
     jest.restoreAllMocks();
+});
+
+beforeEach(() => {
+    (LocalStore as jest.Mock).mockClear();
+    (PageStore as jest.Mock).mockClear();
+    (UrlVariablesExtension as jest.Mock).mockClear();
     window.localStorage.clear();
     window.sessionStorage.clear();
 });
+
+jest.mock('../src/store');
 
 jest.mock('@croct/plug-rule-engine/plugin', () => ({
     default: {
@@ -42,37 +50,13 @@ describe('An URL variables extension installer', () => {
         expect(UrlVariablesExtension).toBeCalledTimes(1);
 
         expect(UrlVariablesExtension).toBeCalledWith(
-            new LocalStore(window.localStorage),
+            expect.any(LocalStore),
             'ct-',
             256,
         );
     });
 
-    test.each<[string, VariableStore, string, number]>([
-        [
-            'page',
-            new PageStore(),
-            'foo-',
-            1,
-        ],
-        [
-            'tab',
-            new LocalStore(window.sessionStorage),
-            'foo-',
-            1,
-        ],
-        [
-            'browser',
-            new LocalStore(window.localStorage),
-            'foo-',
-            1,
-        ],
-    ])('should register the extension with given options', (
-        persistence: 'page' | 'browser' | 'tab',
-        store: VariableStore,
-        prefix: string,
-        priority: number,
-    ) => {
+    test('should store variables using the specified persistence strategy', () => {
         expect(engine.extend).toBeCalledWith('urlVariables', expect.anything());
 
         const [, factory]: [string, ExtensionFactory] = (engine.extend as jest.Mock).mock.calls[0];
@@ -82,17 +66,17 @@ describe('An URL variables extension installer', () => {
             getTabStorage: () => window.sessionStorage,
         };
 
-        const options: Options = {
-            persistence: persistence,
-            priority: priority,
-            prefix: prefix,
-        };
+        factory({options: {persistence: 'page'}, sdk: sdk as PluginSdk});
 
-        factory({options: options, sdk: sdk as PluginSdk});
+        expect(PageStore).toHaveBeenCalled();
 
-        expect(UrlVariablesExtension).toBeCalledTimes(1);
+        factory({options: {persistence: 'tab'}, sdk: sdk as PluginSdk});
 
-        expect(UrlVariablesExtension).toBeCalledWith(store, prefix, priority);
+        expect(LocalStore).toHaveBeenCalledWith(window.sessionStorage);
+
+        factory({options: {persistence: 'browser'}, sdk: sdk as PluginSdk});
+
+        expect(LocalStore).toHaveBeenCalledWith(window.localStorage);
     });
 
     test.each<[any, string]>([
@@ -128,6 +112,7 @@ describe('An URL variables extension installer', () => {
     });
 
     test.each<[any]>([
+        [{}],
         [{persistence: 'page'}],
         [{persistence: 'tab'}],
         [{persistence: 'browser'}],

@@ -41,12 +41,12 @@ describe('A URL variables extension', () => {
     });
 
     test('should provide its priority', () => {
-        const extension = new UrlVariableExtension(new PageStore(), 'ct-', 0);
+        const extension = new UrlVariableExtension(new PageStore(), 'ct-', 1);
 
-        expect(extension.getPriority()).toBe(0);
+        expect(extension.getPriority()).toBe(1);
     });
 
-    test('should persist variables in store', async () => {
+    test('should persist variables in the specified store', async () => {
         const store = new PageStore();
         const extension = new UrlVariableExtension(store, 'ct-', 0);
 
