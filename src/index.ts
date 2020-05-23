@@ -12,7 +12,7 @@ export type Options = {
 
 declare module '@croct/plug-rule-engine/plugin' {
     export interface ExtensionConfigurations {
-        urlVariables?: Options;
+        urlVariables?: Options | boolean;
     }
 }
 
