@@ -23,6 +23,7 @@ jest.mock('@croct/plug-rule-engine/plugin', () => ({
     default: {
         extend: jest.fn(),
     },
+    __esModule: true,
 }));
 
 jest.mock('../src/extension', () => {
@@ -31,6 +32,7 @@ jest.mock('../src/extension', () => {
     return {
         ...actual,
         default: jest.fn(),
+        __esModule: true,
     };
 });
 
