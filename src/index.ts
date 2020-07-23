@@ -8,7 +8,7 @@ export type Options = {
     persistence?: 'page' | 'browser' | 'tab',
     priority?: number,
     prefix?: string,
-}
+};
 
 declare module '@croct/plug-rule-engine/plugin' {
     export interface ExtensionConfigurations {
@@ -35,5 +35,5 @@ engine.extend('urlVariables', ({options, sdk}: ExtensionArguments<Options>) => {
         })(),
         options.prefix ?? 'ct-',
         options.priority ?? 256,
-    )
+    );
 });
